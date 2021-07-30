@@ -12,13 +12,13 @@ public class PayJsProperties {
     /**
      * 商户id
      */
-    String mChId;
+    String[] mChId;
     /**
      * 密钥
      */
-    String secret;
+    String[] secret;
     /**
      * 异步通知地址
      */
-    String notifyUrl;
+    String[] notifyUrl;
 }

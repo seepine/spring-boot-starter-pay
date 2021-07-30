@@ -1,0 +1,18 @@
+{
+  "properties": [
+    {
+      "name": "pay-js.m-ch-id",
+      "type": "java.lang.String[]",
+      "description": "payJS的商户号."
+    },
+    {
+      "name": "pay-js.secret",
+      "type": "java.lang.String[]",
+      "description": "payJs的商户密钥."
+    },
+    {
+      "name": "pay-js.notify-url",
+      "type": "java.lang.String[]",
+      "description": "全局通知回调."
+    }
+  ] }

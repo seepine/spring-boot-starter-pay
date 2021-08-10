@@ -29,13 +29,31 @@ public class PayJsTemplate implements InitializingBean {
         log.info("finish properties : {}", payJsProperties.toString());
     }
 
+    public Channel channel() {
+        return Channel.build(0, payJsProperties);
+    }
+
     public Channel channel(int channel) {
         return Channel.build(channel, payJsProperties);
     }
 
-    public Channel channel() {
-        return Channel.build(0, payJsProperties);
+
+    public PayJsRes pay(String subject, String outTradeNo, Double amount) throws IOException, PayException {
+        return channel().pay(subject, outTradeNo, amount);
     }
+
+    public PayJsRes pay(String subject, String outTradeNo, Double amount, String notifyUrl) throws IOException, PayException {
+        return channel().pay(subject, outTradeNo, amount, notifyUrl);
+    }
+
+    public boolean checkSign(PayJsReq payJsReq) {
+        return channel().checkSign(payJsReq);
+    }
+
+    public PayJsRes close(String payJsOrderId) throws IOException, PayException {
+        return channel().close(payJsOrderId);
+    }
+
 
     public static class Channel {
         private final int channel;
@@ -85,6 +103,19 @@ public class PayJsTemplate implements InitializingBean {
             payData.put("sign", SignUtil.sign(payData, payJsProperties.getSecret()[channel]));
 
             String result = HttpUtil.post("https://payjs.cn/api/native", JSON.toJSONString(payData));
+            PayJsRes payJsRes = JSON.parseObject(result, PayJsRes.class);
+            if (payJsRes.getReturn_code() == 1) {
+                return payJsRes;
+            }
+            throw new PayException(payJsRes.getReturn_msg(), payJsRes);
+        }
+
+        public PayJsRes close(String payJsOrderId) throws IOException, PayException {
+            Map<String, String> payData = new HashMap<>(6);
+            payData.put("payjs_order_id", payJsOrderId);
+            payData.put("sign", SignUtil.sign(payData, payJsProperties.getSecret()[channel]));
+
+            String result = HttpUtil.post("https://payjs.cn/api/close", JSON.toJSONString(payData));
             PayJsRes payJsRes = JSON.parseObject(result, PayJsRes.class);
             if (payJsRes.getReturn_code() == 1) {
                 return payJsRes;

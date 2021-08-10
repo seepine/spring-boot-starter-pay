@@ -10,17 +10,17 @@
     </parent>
     <groupId>com.seepine</groupId>
     <artifactId>spring-boot-starter-pay</artifactId>
-    <version>0.1.0</version>
+    <version>0.1.1</version>
     <name>spring-boot-starter-pay</name>
-    <url>https://gitee.com/seepine/spring-boot-starter-pay.git</url>
+    <url>https://github.com/wraptor/spring-boot-starter-pay.git</url>
     <description>pay sdk for springboot.</description>
     <!--author-->
     <developers>
         <developer>
-            <name>seepine</name>
-            <email>seepine@163.com</email>
-            <organization>http://seepine.com</organization>
-            <organizationUrl>http://seepine.com</organizationUrl>
+            <name>wraptor</name>
+            <email>wraptor@163.com</email>
+            <organization>https://github.com/wraptor</organization>
+            <organizationUrl>https://github.com/wraptor</organizationUrl>
         </developer>
     </developers>
     <!--licenses-->
@@ -33,9 +33,9 @@
     </licenses>
     <!--scm-->
     <scm>
-        <url>http://seepine.com</url>
-        <connection>scm:git:https://gitee.com/seepine/spring-boot-starter-pay.git</connection>
-        <developerConnection>scm:git:https://gitee.com/seepine/spring-boot-starter-pay.git</developerConnection>
+        <url>https://github.com/wraptor</url>
+        <connection>scm:git:https://github.com/wraptor/spring-boot-starter-pay.git</connection>
+        <developerConnection>scm:git:https://github.com/wraptor/spring-boot-starter-pay.git</developerConnection>
     </scm>
 
 

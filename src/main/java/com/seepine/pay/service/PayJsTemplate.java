@@ -29,6 +29,15 @@ public class PayJsTemplate implements InitializingBean {
         log.info("finish properties : {}", payJsProperties.toString());
     }
 
+    public Integer getChannel(String mChId) {
+        for (int i = 0; i < payJsProperties.getMChId().length; i++) {
+            if (payJsProperties.getMChId()[i].equals(mChId)) {
+                return i;
+            }
+        }
+        return null;
+    }
+
     public Channel channel() {
         return Channel.build(0, payJsProperties);
     }
@@ -78,6 +87,50 @@ public class PayJsTemplate implements InitializingBean {
          * @throws IOException  IOException
          * @throws PayException PayException
          */
+        public PayJsRes payCashier(String subject, String outTradeNo, Double amount) throws IOException, PayException {
+            return payCashier(subject, outTradeNo, amount, payJsProperties.getNotifyUrl()[channel]);
+        }
+
+        /**
+         * native下单
+         *
+         * @param subject    标题
+         * @param outTradeNo 订单号（已方自己生成）
+         * @param amount     金额（单位元）
+         * @param notifyUrl  异步通知回调地址
+         * @return PayJsRes
+         * @throws IOException  IOException
+         * @throws PayException PayException
+         */
+        public PayJsRes payCashier(String subject, String outTradeNo, Double amount, String notifyUrl) throws IOException, PayException {
+            Map<String, String> payData = new HashMap<>(6);
+            payData.put("mchid", payJsProperties.getMChId()[channel]);
+            payData.put("total_fee", String.valueOf((int) (amount * 100)));
+            payData.put("out_trade_no", outTradeNo);
+            payData.put("body", subject);
+            payData.put("notify_url", notifyUrl);
+            payData.put("auto", notifyUrl);
+            payData.put("hide", notifyUrl);
+            payData.put("sign", SignUtil.sign(payData, payJsProperties.getSecret()[channel]));
+
+            String result = HttpUtil.post("https://payjs.cn/api/cashier", JSON.toJSONString(payData));
+            PayJsRes payJsRes = JSON.parseObject(result, PayJsRes.class);
+            if (payJsRes.getReturn_code() == 1) {
+                return payJsRes;
+            }
+            throw new PayException(payJsRes.getReturn_msg(), payJsRes);
+        }
+
+        /**
+         * native下单
+         *
+         * @param subject    标题
+         * @param outTradeNo 订单号（已方自己生成）
+         * @param amount     金额（单位元）
+         * @return PayJsRes
+         * @throws IOException  IOException
+         * @throws PayException PayException
+         */
         public PayJsRes pay(String subject, String outTradeNo, Double amount) throws IOException, PayException {
             return pay(subject, outTradeNo, amount, payJsProperties.getNotifyUrl()[channel]);
         }
@@ -111,13 +164,29 @@ public class PayJsTemplate implements InitializingBean {
         }
 
         public PayJsRes close(String payJsOrderId) throws IOException, PayException {
-            Map<String, String> payData = new HashMap<>(6);
+            Map<String, String> payData = new HashMap<>(2);
             payData.put("payjs_order_id", payJsOrderId);
             payData.put("sign", SignUtil.sign(payData, payJsProperties.getSecret()[channel]));
 
             String result = HttpUtil.post("https://payjs.cn/api/close", JSON.toJSONString(payData));
             PayJsRes payJsRes = JSON.parseObject(result, PayJsRes.class);
             if (payJsRes.getReturn_code() == 1) {
+                return payJsRes;
+            }
+            throw new PayException(payJsRes.getReturn_msg(), payJsRes);
+        }
+
+        public PayJsRes check(String payJsOrderId) throws IOException, PayException {
+            Map<String, String> payData = new HashMap<>(2);
+            payData.put("payjs_order_id", payJsOrderId);
+            payData.put("sign", SignUtil.sign(payData, payJsProperties.getSecret()[channel]));
+
+            String result = HttpUtil.post("https://payjs.cn/api/check", JSON.toJSONString(payData));
+            PayJsRes payJsRes = JSON.parseObject(result, PayJsRes.class);
+            if (payJsRes.getReturn_code() == 1) {
+                if (!payJsRes.getMchid().equals(payJsProperties.getMChId()[channel])) {
+                    throw new PayException("商户id不匹配", payJsRes);
+                }
                 return payJsRes;
             }
             throw new PayException(payJsRes.getReturn_msg(), payJsRes);

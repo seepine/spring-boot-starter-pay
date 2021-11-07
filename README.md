@@ -10,7 +10,7 @@
 <dependency>
   <groupId>com.seepine</groupId>
   <artifactId>spring-boot-starter-pay</artifactId>
-  <version>0.1.0</version>
+  <version>0.1.2</version>
 </dependency>
 ```
 
@@ -55,6 +55,18 @@ PayJsRes payRes = payJsTemplate.channel().pay(String subject, //商品标题
         Boolean isSign = payJsTemplate.channel().checkSign(payJsReq);
         //业务逻辑...
     }
+```
+### 3.查询订单
+一般用于关闭订单前主动查询订单状态，避免已支付成功但回调未收到，误操作业务订单状态
+```java
+// status1表示支付成功，其他参数可查看PayJsRes中带有check注解，或查询官方文档
+PayJsRes payRes = payJsTemplate.channel().check(String payJsOrderId);
+```
+### 4.关闭订单
+用来主动关闭订单，避免业务订单已设为过期，但买家又能继续扫码支付
+```java
+// status1表示支付成功，其他参数可查看PayJsRes中带有check注解，或查询官方文档
+PayJsRes payRes = payJsTemplate.channel().close(String payJsOrderId);
 ```
 
 ## 多商户配置

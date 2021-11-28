@@ -14,5 +14,41 @@
       "name": "pay-js.notify-url",
       "type": "java.lang.String[]",
       "description": "全局通知回调."
+    },
+    {
+      "name": "ali-pay.server-url",
+      "type": "java.lang.String[]",
+      "description": "支付宝网关."
+    },
+    {
+      "name": "ali-pay.notify-url",
+      "type": "java.lang.String[]",
+      "description": "全局通知回调."
+    },
+    {
+      "name": "ali-pay.app-id",
+      "type": "java.lang.String[]",
+      "description": "支付宝应用id."
+    },
+    {
+      "name": "ali-pay.app-private-key-path",
+      "type": "java.lang.String[]",
+      "description": "应用私钥路径.example.com_私钥."
+    },
+    {
+      "name": "ali-pay.alipay-public-cert-path",
+      "type": "java.lang.String[]",
+      "description": "支付宝公共证书路径，alipayCertPublicKey_RSA2.crt."
+    },
+    {
+      "name": "ali-pay.alipay-root-cert-path",
+      "type": "java.lang.String[]",
+      "description": "支付宝根证书路径，alipayRootCert.crt."
+    },
+    {
+      "name": "ali-pay.app-cert-public-key-path",
+      "type": "java.lang.String[]",
+      "description": "应用公共证书路径，appCertPublicKey_xxxxxxxxxxxxxxxx.crt."
     }
-  ] }
+  ]
+}

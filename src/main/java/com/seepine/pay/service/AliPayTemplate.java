@@ -9,7 +9,9 @@ import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.internal.util.file.IOUtils;
 import com.alipay.api.request.AlipayTradePrecreateRequest;
+import com.alipay.api.request.AlipayTradeQueryRequest;
 import com.alipay.api.response.AlipayTradePrecreateResponse;
+import com.alipay.api.response.AlipayTradeQueryResponse;
 import com.seepine.http.util.StrUtil;
 import com.seepine.pay.entity.alipay.AliPayAutoProperties;
 import com.seepine.pay.entity.alipay.AliPayProperties;
@@ -115,6 +117,21 @@ public class AliPayTemplate implements InitializingBean {
     return new Channel(alipayClients[channel], aliPayProperties[0]);
   }
 
+  /**
+   * 通过appId获取商户坐标
+   *
+   * @param appId appId
+   * @return 商户坐标
+   */
+  public Integer getChannel(String appId) {
+    for (int i = 0; i < aliPayProperties.length; i++) {
+      if (aliPayProperties[i].getAppId().equals(appId)) {
+        return i;
+      }
+    }
+    return null;
+  }
+
   public static class Channel {
     private final AliPayProperties properties;
     private final AlipayClient alipayClient;
@@ -182,7 +199,30 @@ public class AliPayTemplate implements InitializingBean {
       }
       return qrCode;
     }
-
+    /**
+     * 统一收单线下交易查询
+     *
+     * @param outTradeNo 商户订单号
+     * @return 二维码内容，需要将内容生成一张二维码图片
+     */
+    public AliPayRes tradeQuery(String outTradeNo) {
+      AlipayTradeQueryRequest request = new AlipayTradeQueryRequest();
+      request.setNotifyUrl(properties.getNotifyUrl());
+      JSONObject bodyReq = new JSONObject();
+      bodyReq.put("out_trade_no", outTradeNo);
+      request.setBizContent(bodyReq.toString());
+      AlipayTradeQueryResponse execute;
+      try {
+        execute = alipayClient.certificateExecute(request);
+      } catch (AlipayApiException e) {
+        e.printStackTrace();
+        throw new PayException(e.getMessage());
+      }
+      if (!execute.isSuccess()) {
+        throw new PayException(execute.getBody());
+      }
+      return JSON.parseObject(JSON.toJSONString(execute), AliPayRes.class);
+    }
     /**
      * 支付宝异步通知验签和解析
      *

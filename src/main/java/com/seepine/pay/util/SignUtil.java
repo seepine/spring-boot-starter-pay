@@ -67,6 +67,17 @@ public class SignUtil {
     return bytes;
   }
 
+  public static String md5(String str) throws IOException {
+    byte[] byteArray = getMd5Digest(str);
+    StringBuilder md5StrBuff = new StringBuilder();
+    for (byte b : byteArray) {
+      if (Integer.toHexString(0xFF & b).length() == 1)
+        md5StrBuff.append("0").append(Integer.toHexString(0xFF & b));
+      else md5StrBuff.append(Integer.toHexString(0xFF & b));
+    }
+    return md5StrBuff.toString();
+  }
+
   public static boolean rsaCertCheckV2(Map<String, String> params, String alipayCert)
       throws AlipayApiException {
     String sign = params.get("sign");

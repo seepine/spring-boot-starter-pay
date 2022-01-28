@@ -49,6 +49,21 @@
       "name": "ali-pay.app-cert-public-key-path",
       "type": "java.lang.String[]",
       "description": "应用公共证书路径，appCertPublicKey_xxxxxxxxxxxxxxxx.crt."
+    },
+    {
+      "name": "xor-pay.aid",
+      "type": "java.lang.String[]",
+      "description": "xorPay的商户号."
+    },
+    {
+      "name": "xor-pay.secret",
+      "type": "java.lang.String[]",
+      "description": "xorPay的商户密钥."
+    },
+    {
+      "name": "xor-pay.notify-url",
+      "type": "java.lang.String[]",
+      "description": "全局通知回调."
     }
   ]
 }

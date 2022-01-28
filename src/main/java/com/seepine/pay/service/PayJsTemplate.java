@@ -103,7 +103,7 @@ public class PayJsTemplate implements InitializingBean {
          * @throws PayException PayException
          */
         public PayJsRes payCashier(String subject, String outTradeNo, Double amount, String notifyUrl) throws IOException, PayException {
-            Map<String, String> payData = new HashMap<>(6);
+      Map<String, String> payData = new HashMap<>(8);
             payData.put("mchid", payJsProperties.getMChId()[channel]);
             payData.put("total_fee", String.valueOf((int) (amount * 100)));
             payData.put("out_trade_no", outTradeNo);

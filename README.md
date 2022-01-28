@@ -7,7 +7,7 @@
 <dependency>
     <groupId>com.seepine</groupId>
     <artifactId>spring-boot-starter-pay</artifactId>
-    <version>0.2.0</version>
+    <version>0.2.3</version>
 </dependency>
 ```
 
@@ -18,3 +18,7 @@
 ### 支付宝文档
 
 [https://seepine.com/springboot/alipay/](https://seepine.com/springboot/alipay/)
+
+### xorPay文档
+
+[https://seepine.com/springboot/xorpay/](https://seepine.com/springboot/xorpay/)
